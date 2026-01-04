@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: local-path-provisioner
+  namespace: argocd # Must match your Argo CD installation namespace
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc # Your cluster's API server
+  sources:
+    # Source 1: The third-party repository with base manifests
+    - repoURL: https://github.com/rancher/local-path-provisioner
+      targetRevision: master # or a specific commit/tag/branch
+      path: "deploy/local-path-storage.yaml" # Path to the base manifests in the third-party repo
+
+    # Source 2: Your local repository with kustomization.yaml (the overlay)
+    - repoURL: https://github.com/BeatGrate/nucky-thompson-deployments
+      targetRevision: initial-test # or your specific branch (e.g., main)
+      path: "infra/local-path-provisioner" # Path to your kustomization.yaml file
+      directory:
+        # Kustomize should be automatically detected in this path
+        recurse: false # Optional: Prevents recursive scanning if only the specific path is needed
+  
+  # Sync policy (optional)
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+
