@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://kubernetes-sigs.github.io/gateway-api
     chart: gateway-api
-    targetRevision: v1.1.0   # change to the version you want
+    targetRevision: v1.4.1   # change to the version you want
     helm:
       releaseName: gateway-api
       values: |
