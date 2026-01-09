@@ -15,7 +15,7 @@ spec:
       targetRevision: v38.0.2 # Use a specific chart version (e.g., "  # Optional: Configure sync policy for automatic deployment
       helm:
         valueFiles:
-          - $values/infra/traefik/mi6.values.yaml
+          - $values/infra/traefik/mi6-values.yaml
 
     - repoURL: https://github.com/BeatGrate/nucky-thompson-deployments.git
       targetRevision: initial-test
