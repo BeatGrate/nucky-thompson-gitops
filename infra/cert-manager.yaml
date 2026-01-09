@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager
+  namespace: argocd
+spec:
+  project: default
+
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: cert-manager
+  sources:
+    - repoURL: oci://quay.io/jetstack/charts/cert-manager # Traefik Helm chart repository URL
+      path: .
+      targetRevision: v1.19.2 # Use a specific chart version (e.g., "  # Optional: Configure sync policy for automatic deployment
+      helm:
+        valueFiles:
+          - $values/infra/cert-manager/mi6-values.yaml
+
+    - repoURL: https://github.com/BeatGrate/nucky-thompson-deployments.git
+      targetRevision: initial-test
+      ref: values
+
+  syncPolicy:
+    automated:
+      prune: true # Allows ArgoCD to delete resources that are no longer in Git
+      selfHeal: true # Allows ArgoCD to sync changes if the live state drifts from Git
+    syncOptions:
+      # Automatically create the destination namespace if it doesn't exist
+      - CreateNamespace=true
