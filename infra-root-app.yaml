@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: nucky-infra
+  namespace: argocd
+  # Add a finalizer to ensure child apps are deleted when the parent is deleted
+  finalizers:
+    - resources.argocd.argoproj.io/must-delete-dependent-resources
+spec:
+  project: default
+  source:
+    # The repository where your child app definitions are stored
+    repoURL: https://github.com/BeatGrate/nucky-thompson-gitops
+    targetRevision: initial-test # or a specific branch/tag/commit SHA
+    # The path within the repo that contains the child application YAML files
+    path: infra
+  destination:
+    # The destination server for the child Application *resources* (usually the same cluster as Argo CD)
+    server: https://kubernetes.default.svc
+    namespace: argocd # Child Application resources are typically in the argocd namespace
+  syncPolicy:
+    automated:
+      prune: true # Allows deletion of child apps if removed from Git
+      selfHeal: true # Automatically syncs if the live state drifts from Git
+    # Optionally, control the order of creation for resources
+    # syncOptions:
+    # - CreateNamespace=true 
+
