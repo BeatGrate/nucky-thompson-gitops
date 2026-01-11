@@ -15,6 +15,9 @@ spec:
       targetRevision: v38.0.2 # Use a specific chart version (e.g., "  # Optional: Configure sync policy for automatic deployment
       helm:
         values: |
+          kubernetes:
+            ingressEndpoint:
+              publishedService: "traefik/traefik"
           providers:
             kubernetesIngress:
               enabled: false
