@@ -18,8 +18,6 @@ spec:
           providers:
             kubernetesGateway:
               enabled: true
-          gateway:
-            namespacePolicy: All
   syncPolicy:
     automated:
       prune: true # Allows ArgoCD to delete resources that are no longer in Git
