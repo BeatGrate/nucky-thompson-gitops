@@ -16,6 +16,8 @@ spec:
       helm:
         values: |
           providers:
+            kubernetesIngress:
+              enabled: false
             kubernetesGateway:
               enabled: true
   syncPolicy:
