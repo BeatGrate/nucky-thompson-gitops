@@ -21,7 +21,7 @@ spec:
             kubernetesGateway:
               enabled: true
           service:
-            type: CLusterIP
+            type: ClusterIP
   syncPolicy:
     automated:
       prune: true # Allows ArgoCD to delete resources that are no longer in Git
