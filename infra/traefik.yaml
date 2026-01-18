@@ -28,8 +28,6 @@ spec:
               protocol: HTTPS
               certificateRefs:
                 - name: argocd-tls
-        service:
-          type: ClusterIP
 
   destination:
     server: "https://kubernetes.default.svc"
