@@ -16,13 +16,13 @@ spec:
         global:
           domain: argocd.mi6.com
         server:
-          insecure: true
+          service:
+            servicePortHttpsAppProtocol: HTTPS
           httproute:
             enabled: true
             parentRefs:
               - name: traefik-gateway
                 namespace: traefik
-                sectionName: web
             hostnames:
               - "argocd.mi6.com"
             rules:
@@ -32,34 +32,7 @@ spec:
                       value: /
                 backendRefs:
                   - name: argocd-server
-                    port: 80
-
-        configs:
-          cm:
-            ui.bannercontent: "🚀 Mi6 ArgoCD"
-            timeout.relogin: "72h" # Stop getting logged out every hour
-            
-            # Health Check for Cert-Manager (Shows "Healthy" in UI when cert is ready)
-            resource.customizations: |
-              cert-manager.io/Certificate:
-                health.lua: |
-                  hs = {}
-                  if obj.status ~= nil and obj.status.conditions ~= nil then
-                    for i, condition in ipairs(obj.status.conditions) do
-                      if condition.type == "Ready" and condition.status == "True" then
-                        hs.status = "Healthy"
-                        hs.message = "Certificate is ready"
-                        return hs
-                      end
-                    end
-                  end
-                  hs.status = "Progressing"
-                  hs.message = "Waiting for certificate"
-                  return hs
-
-        controller:
-          statusProcessors: 20
-          operationProcessors: 10
+                    port: 443
 
   destination:
     server: https://kubernetes.default.svc
