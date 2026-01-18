@@ -1,0 +1,86 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd-self-managed
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://argoproj.github.io/argo-helm
+    chart: argo-cd
+    targetRevision: 9.3.4 # Recommended: Check for the latest version
+    helm:
+      values: |
+        server:
+          insecure: true # Traefik handles SSL, Argo runs on HTTP internally
+          
+          config:
+            exec.enabled: "true" # Enables shell terminal in the Argo UI
+          
+          # UI Customization for Homelab
+          rbacConfig:
+            policy.default: role:admin # Simplifies homelab access (be careful in prod)
+          
+          extraObjects:
+            - apiVersion: gateway.networking.k8s.io/v1
+              kind: HTTPRoute
+              metadata:
+                name: argocd-server-route
+                annotations:
+                  # Tells cert-manager to issue a cert for this route
+                  cert-manager.io/cluster-issuer: "letsencrypt-prod" 
+              spec:
+                parentRefs:
+                  - name: traefik-gateway    # Update to your actual Traefik Gateway name
+                    namespace: traefik       # Update to your Traefik namespace
+                hostnames:
+                  - "argocd.mi6.com"   # Update to your domain
+                rules:
+                  - matches:
+                      - path: { type: PathPrefix, value: / }
+                    backendRefs:
+                      - name: argocd-server
+                        port: 80
+
+        configs:
+          cm:
+            ui.bannercontent: "🚀 Mi6 ArgoCD"
+            timeout.relogin: "72h" # Stop getting logged out every hour
+            
+            # Health Check for Cert-Manager (Shows "Healthy" in UI when cert is ready)
+            resource.customizations: |
+              cert-manager.io/Certificate:
+                health.lua: |
+                  hs = {}
+                  if obj.status ~= nil and obj.status.conditions ~= nil then
+                    for i, condition in ipairs(obj.status.conditions) do
+                      if condition.type == "Ready" and condition.status == "True" then
+                        hs.status = "Healthy"
+                        hs.message = "Certificate is ready"
+                        return hs
+                      end
+                    end
+                  end
+                  hs.status = "Progressing"
+                  hs.message = "Waiting for certificate"
+                  return hs
+
+        controller:
+          statusProcessors: 20
+          operationProcessors: 10
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argocd
+
+  # --- SYNC POLICY ---
+  # Initially empty for safe adoption. 
+  # Once synced manually, uncomment the automated block below.
+  syncPolicy:
+    # automated:
+    #   prune: true
+    #   selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
