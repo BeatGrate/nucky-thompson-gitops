@@ -23,6 +23,16 @@ spec:
               - name: traefik-gateway
                 namespace: traefik
                 sectionName: web
+            hostnames:
+              - "argocd.mi6.com"
+            rules:
+              - matches:
+                  - path:
+                      type: PathPrefix
+                      value: /
+                backendRefs:
+                  - name: argocd-server
+                    port: 80
 
         configs:
           cm:
