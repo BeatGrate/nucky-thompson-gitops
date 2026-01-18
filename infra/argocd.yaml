@@ -16,6 +16,7 @@ spec:
         global:
           domain: argocd.mi6.com
         server:
+          insecure: true
           httproute:
             enabled: true
             parentRefs:
