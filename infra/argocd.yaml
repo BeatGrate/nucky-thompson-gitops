@@ -13,36 +13,15 @@ spec:
     targetRevision: 9.3.4 # Recommended: Check for the latest version
     helm:
       values: |
+        global:
+          domain: argocd.mi6.com
         server:
-          insecure: true # Traefik handles SSL, Argo runs on HTTP internally
-          
-          config:
-            exec.enabled: "true" # Enables shell terminal in the Argo UI
-          
-          # UI Customization for Homelab
-          rbacConfig:
-            policy.default: role:admin # Simplifies homelab access (be careful in prod)
-          
-          extraObjects:
-            - apiVersion: gateway.networking.k8s.io/v1
-              kind: HTTPRoute
-              metadata:
-                name: argocd-server-route
-                annotations:
-                  # Tells cert-manager to issue a cert for this route
-                  cert-manager.io/cluster-issuer: "letsencrypt-prod" 
-              spec:
-                parentRefs:
-                  - name: traefik-gateway    # Update to your actual Traefik Gateway name
-                    namespace: traefik       # Update to your Traefik namespace
-                hostnames:
-                  - "argocd.mi6.com"   # Update to your domain
-                rules:
-                  - matches:
-                      - path: { type: PathPrefix, value: / }
-                    backendRefs:
-                      - name: argocd-server
-                        port: 80
+          httproute:
+            enabled: true
+            parentRefs:
+              - name: traefik-gateway
+                namespace: traefik
+                sectionName: web
 
         configs:
           cm:
