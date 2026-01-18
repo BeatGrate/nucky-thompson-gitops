@@ -5,16 +5,12 @@ metadata:
   namespace: argocd
 spec:
   project: default
-
-  destination:
-    server: "https://kubernetes.default.svc"
-    namespace: traefik
-  sources:
-    - repoURL: https://traefik.github.io/charts # Traefik Helm chart repository URL
-      chart: traefik
-      targetRevision: v38.0.2 # Use a specific chart version (e.g., "  # Optional: Configure sync policy for automatic deployment
-      helm:
-values: |
+  source:
+    repoURL: https://traefik.github.io/charts
+    chart: traefik
+    targetRevision: 38.0.2
+    helm:
+      values: |
         # 1. Network: Bind Traefik directly to Node IP (80/443)
         hostNetwork: true
         deployment:
@@ -55,11 +51,14 @@ values: |
         # 5. Service: Use ClusterIP (HostNetwork handles the outside reach)
         service:
           type: ClusterIP
+
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: traefik
+
   syncPolicy:
     automated:
-      prune: true # Allows ArgoCD to delete resources that are no longer in Git
-      selfHeal: true # Allows ArgoCD to sync changes if the live state drifts from Git
+      prune: true
+      selfHeal: true
     syncOptions:
-      # Automatically create the destination namespace if it doesn't exist
       - CreateNamespace=true
-
