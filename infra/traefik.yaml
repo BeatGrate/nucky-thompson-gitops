@@ -16,9 +16,6 @@ spec:
             enabled: false
           kubernetesGateway:
             enabled: true
-        gateway:
-          enabled: true
-          namespacePolicy: All
   destination:
     server: "https://kubernetes.default.svc"
     namespace: traefik
