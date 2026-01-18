@@ -38,6 +38,11 @@ spec:
               protocol: HTTPS
               namespacePolicy:
                 from: All
+              tls:
+                mode: Terminate
+                certificateRefs:
+                  - name: argocd-server-tls
+                    kind: Secret
 
         # 4. Ports: Ensure host mapping is active
         ports:
