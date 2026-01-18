@@ -18,16 +18,7 @@ spec:
             enabled: true
         gateway:
           enabled: true
-          annotations:
-            cert-manager.io/issuer: selfsigned-issuer
-          listeners:
-            websecure:
-              hostname: "argocd.mi6.com"
-              port: 8443
-              protocol: HTTPS
-              certificateRefs:
-                - name: argocd-tls
-
+          namespacePolicy: All
   destination:
     server: "https://kubernetes.default.svc"
     namespace: traefik
