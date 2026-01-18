@@ -17,9 +17,19 @@ spec:
             enabled: false
           kubernetesGateway:
             enabled: true
+        gateway:
+          enabled: true
+          annotations:
+            cert-manager.io/issuer: selfsigned-issuer
+          listeners:
+            websecure:
+              hostname: "argocd.mi6.com"
+              port: 8443
+              protocol: HTTPS
+              certificateRefs:
+                - name: argocd-tls
         service:
-          spec:
-            loadBalancerIP: "192.168.1.9"
+          type: ClusterIP
 
   destination:
     server: "https://kubernetes.default.svc"
