@@ -19,8 +19,10 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
-
   syncPolicy:
     automated:
-#      prune: true
-#      selfHeal: true
+      prune: true # Allows ArgoCD to delete resources that are no longer in Git
+      selfHeal: true # Allows ArgoCD to sync changes if the live state drifts from Git
+    syncOptions:
+      # Automatically create the destination namespace if it doesn't exist
+      - CreateNamespace=true
