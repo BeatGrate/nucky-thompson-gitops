@@ -24,8 +24,8 @@ spec:
   # Initially empty for safe adoption. 
   # Once synced manually, uncomment the automated block below.
   syncPolicy:
-    # automated:
-    #   prune: true
-    #   selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
+    automated:
+    prune: true
+    selfHeal: true
+  syncOptions:
+    - CreateNamespace=true
