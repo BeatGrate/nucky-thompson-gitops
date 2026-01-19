@@ -11,6 +11,8 @@ spec:
     targetRevision: 38.0.2
     helm:
       values: |
+        api:
+          dashboard: true
         providers:
           kubernetesIngress:
             enabled: false
