@@ -16,8 +16,10 @@ spec:
         values: |
           crds:
             enabled: true
-          extraArgs:
-            - --enable-gateway-api
+          config:
+            apiVersion: controller.config.cert-manager.io/v1alpha1
+            kind: ControllerConfiguration
+            enableGatewayAPI: true
   syncPolicy:
     automated:
       prune: true # Allows ArgoCD to delete resources that are no longer in Git
