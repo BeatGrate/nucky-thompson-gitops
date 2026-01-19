@@ -13,6 +13,7 @@ spec:
       values: |
         api:
           dashboard: true
+          insecure: true
         providers:
           kubernetesIngress:
             enabled: false
