@@ -12,12 +12,12 @@ spec:
     helm:
       values: |
         podDnsConfig:
-        enabled: true
-        policy: "None"
-        nameservers:
-        - 127.0.0.1
-        - 1.1.1.1
-        - 8.8.8.8
+          enabled: true
+          policy: "None"
+          nameservers:
+          - 127.0.0.1
+          - 1.1.1.1
+          - 8.8.8.8
   destination:
     server: https://kubernetes.default.svc
     namespace: pihole
