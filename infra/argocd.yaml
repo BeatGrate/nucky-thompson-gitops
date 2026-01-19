@@ -20,9 +20,6 @@ spec:
     server: https://kubernetes.default.svc
     namespace: argocd
 
-  # --- SYNC POLICY ---
-  # Initially empty for safe adoption. 
-  # Once synced manually, uncomment the automated block below.
   syncPolicy:
     automated:
       prune: true
