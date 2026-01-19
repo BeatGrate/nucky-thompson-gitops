@@ -13,27 +13,9 @@ spec:
     targetRevision: 9.3.4 # Recommended: Check for the latest version
     helm:
       values: |
-        global:
-          domain: argocd.mi6.com
-        server:
-          service:
-            servicePortHttpsAppProtocol: HTTPS
-          httproute:
-            enabled: true
-            parentRefs:
-              - name: traefik-gateway
-                namespace: traefik
-            hostnames:
-              - "argocd.mi6.com"
-            rules:
-              - matches:
-                  - path:
-                      type: PathPrefix
-                      value: /
-                backendRefs:
-                  - name: argocd-server
-                    port: 443
-
+        configs:
+          params:
+            server.insecure: true
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
