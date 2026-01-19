@@ -9,6 +9,15 @@ spec:
     repoURL: https://mojo2600.github.io/pihole-kubernetes
     chart: pihole
     targetRevision: 2.35.0 # Recommended: Check for the latest version
+    helm:
+      values: |
+        podDnsConfig
+        enabled: true
+        policy: "None"
+        nameservers:
+        - 127.0.0.1
+        - 1.1.1.1
+        - 8.8.8.8
   destination:
     server: https://kubernetes.default.svc
     namespace: pihole
