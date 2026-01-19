@@ -16,14 +16,6 @@ spec:
             enabled: false
           kubernetesGateway:
             enabled: true
-            gateway:
-              listeners:
-                - name: web
-                  port: 80
-                  protocol: HTTP
-                - name: websecure
-                  port: 443
-                  protocol: HTTPS
   destination:
     server: "https://kubernetes.default.svc"
     namespace: traefik
