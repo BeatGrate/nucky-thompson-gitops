@@ -12,12 +12,7 @@ spec:
     helm:
       values: |
         podDnsConfig:
-          enabled: true
-          policy: "None"
-          nameservers:
-          - 127.0.0.1
-          - 1.1.1.1
-          - 8.8.8.8
+          enabled: false
         dnsmasq:
           customDnsEntries:
             - address=/argocd.mi6.com/192.168.1.9
